@@ -7,4 +7,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Projekty\FridgeControll\FridgeControll\FridgeControll\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Projekty\FridgeControll\FridgeControll\FridgeControll\.editorconfig" />
+  </ItemGroup>
+
 </Project>

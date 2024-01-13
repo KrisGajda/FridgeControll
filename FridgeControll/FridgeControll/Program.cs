@@ -1,2 +1,42 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using FridgeControll;
+
+Console.WriteLine("Welcome to FridgeCont");
+Console.WriteLine("-----------------------------------------");
+Console.WriteLine("Control temperature in laboratory fridge.");
+Console.WriteLine("-----------------------------------------");
+
+var fridge_1 = new FridgeInMemory("Polar", "Pol-15-C", 6, 2);
+fridge_1.TemperatureAdded += FridgeTemperatureAdded;
+
+while (true)
+{
+    Console.WriteLine("Podaj temperaturę w lodówce lub zakończ (q): ");
+    var input = Console.ReadLine();
+    if (input == "q" || input == "Q")
+    {
+        break;
+    }
+    try
+    {
+        fridge_1.AddTemperature(input);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Exception catched: {ex.Message}");
+    }
+}
+void FridgeTemperatureAdded(object sender, EventArgs args)
+{
+    Console.WriteLine("Dodano nowy pomiar temperatury");
+}
+
+var statistics1 = fridge_1.GetStatistics();
+Console.WriteLine($"Fridge: {fridge_1.Producer} {fridge_1.Id}");
+Console.WriteLine($"Correct temperature: {fridge_1.CorrectTemperature}");
+Console.WriteLine($"Allowable temperature difference: {fridge_1.AllowableDifference}");
+Console.WriteLine($"Min. temperature: {statistics1.Min}");
+Console.WriteLine($"Max. temperature: {statistics1.Max}");
+Console.WriteLine($"Average temperature: {statistics1.Average:N2}");
+Console.WriteLine($"Number of measures: {statistics1.Count}");
+Console.WriteLine($"Number of bad measures: {statistics1.CountBad}");
+Console.WriteLine($"Fridge technical condition: {statistics1.TechnicalCondition}");
