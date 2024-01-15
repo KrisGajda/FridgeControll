@@ -40,7 +40,7 @@
                 }
                 else
                 {
-
+                    throw new Exception("Wprowadzona temperatura wykracza poza wymaganą skalę (0 - 40)");
                 }
             }
         }
@@ -58,7 +58,7 @@
                 }
                 else
                 {
-
+                    throw new Exception("Wprowadzona dopuszczalna odchyłka temperatury wykracza poza wymaganą skalę (+-5)");
                 }
             }
         }
