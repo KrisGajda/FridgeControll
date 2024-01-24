@@ -5,7 +5,7 @@ Console.WriteLine("-----------------------------------------");
 Console.WriteLine("Control temperature in laboratory fridge.");
 Console.WriteLine("-----------------------------------------");
 
-var fridge_1 = new FridgeInMemory("Polar", "Pol-15-C", 6, 2);
+var fridge_1 = new FridgeInFile("Polar", "Pol-15-C", 6, 2);
 fridge_1.TemperatureAdded += FridgeTemperatureAdded;
 
 while (true)
@@ -36,7 +36,7 @@ Console.WriteLine($"Correct temperature: {fridge_1.CorrectTemperature} °C");
 Console.WriteLine($"Allowable temperature difference: {fridge_1.AllowableDifference} °C");
 Console.WriteLine($"Min. temperature: {statistics1.Min} \x00b0C");
 Console.WriteLine($"Max. temperature: {statistics1.Max} °C");
-Console.WriteLine($"Average temperature: {statistics1.Average:N2} °C");
+Console.WriteLine($"Average temperature: {statistics1.Average:N1} °C");
 Console.WriteLine($"Number of measures: {statistics1.Count}");
 Console.WriteLine($"Number of bad measures: {statistics1.CountBad}");
 Console.WriteLine($"Fridge technical condition: {statistics1.TechnicalCondition}");
