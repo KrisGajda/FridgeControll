@@ -4,22 +4,25 @@
     {
         public delegate void TemperatureAddedDelegate(object sender, EventArgs args);
         public abstract event TemperatureAddedDelegate TemperatureAdded;
-        public FridgeBase(string producer, string id, float correctTemperature, float allowableDifference)
+
+        public FridgeBase()
+            : this("DefaultProducer", "Default ID", 6, 2)
         {
-            this.Producer = producer;
-            this.Id = id;
-            this.CorrectTemperature = correctTemperature;
-            this.AllowableDifference = allowableDifference;
         }
 
         public FridgeBase(string producer, string id)
             : this(producer, id, 6, 2)
         {
+            Producer = producer;
+            Id = id;
         }
 
-        public FridgeBase()
-            : this("DefaultProducer", "Default ID", 6, 2)
+        public FridgeBase(string producer, string id, float correctTemperature, float allowableDifference)
         {
+            Producer = producer;
+            Id = id;
+            CorrectTemperature = correctTemperature;
+            AllowableDifference = allowableDifference;
         }
 
         public string Producer { get; private set; }
@@ -34,13 +37,13 @@
             }
             set
             {
-                if (value < 40 && value > 0)
+                if (value <= 40 && value >= -10)
                 {
                     correctTemperature = value;
                 }
                 else
                 {
-                    throw new Exception("Wprowadzona temperatura wykracza poza wymaganą skalę (0 - 40)");
+                    throw new Exception("Wprowadzona temperatura wykracza poza wymaganą skalę (-10 do +40°C)");
                 }
             }
         }
@@ -58,15 +61,39 @@
                 }
                 else
                 {
-                    throw new Exception("Wprowadzona dopuszczalna odchyłka temperatury wykracza poza wymaganą skalę (+-5)");
+                    throw new Exception("Wprowadzona dopuszczalna odchyłka temperatury wykracza poza wymaganą skalę (+-5°C)");
                 }
             }
         }
         public abstract void AddTemperature(float temperature);
-        public abstract void AddTemperature(string temperature);
-        public abstract void AddTemperature(double temperature);
-        public abstract void AddTemperature(int temperature);
-        public abstract void AddTemperature(long temperature);
+        public void AddTemperature(string temperature)
+        {
+            if (float.TryParse(temperature, out float result))
+            {
+                AddTemperature(result);
+            }
+            else
+            {
+                throw new Exception("Input value is not a number value!");
+            }
+        }
+        public void AddTemperature(double temperature)
+        {
+            float temperatureValue = (float)temperature;
+            AddTemperature(temperatureValue);
+        }
+        public void AddTemperature(int temperature)
+        {
+            float temperatureValue = temperature;
+            AddTemperature(temperatureValue);
+        }
+
+        public void AddTemperature(long temperature)
+        {
+            float temperatureValue = temperature;
+            AddTemperature(temperatureValue);
+        }
+
         public abstract Statistics GetStatistics();
     }
 }

@@ -12,7 +12,7 @@
         {
             get
             {
-                return this.Sum / this.Count;
+                return Sum / Count;
             }
         }
 
@@ -28,7 +28,7 @@
         {
             get
             {
-                switch (this.Condition)
+                switch (Condition)
                 {
                     case var percentageOfDeviations when percentageOfDeviations >= 50:
                         return "E - lodówka niesprawna! Przenieś próbki do innej lodówki!";
@@ -45,22 +45,22 @@
         }
         public Statistics()
         {
-            this.Count = 0;
-            this.CountBad = 0;
-            this.Sum = 0;
-            this.Max = float.MinValue;
-            this.Min = float.MaxValue;
+            Count = 0;
+            CountBad = 0;
+            Sum = 0;
+            Max = float.MinValue;
+            Min = float.MaxValue;
         }
         public void AddTemperature(float temperature)
         {
-            this.Count++;
-            this.Sum += temperature;
-            this.Min = Math.Min(this.Min, temperature);
-            this.Max = Math.Max(this.Max, temperature);
+            Count++;
+            Sum += temperature;
+            Min = Math.Min(Min, temperature);
+            Max = Math.Max(Max, temperature);
         }
         public void CountBadTemperature()
         {
-            this.CountBad++;
+            CountBad++;
         }
     }
 }

@@ -6,6 +6,8 @@ namespace FridgeControll
     {
         string Producer { get; }
         string Id { get; }
+        float CorrectTemperature { get; }
+        float AllowableDifference {  get; }
         void AddTemperature(float temperature);
         void AddTemperature(string temperature);
         void AddTemperature(double temperature);

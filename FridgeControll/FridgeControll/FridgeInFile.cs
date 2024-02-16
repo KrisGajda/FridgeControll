@@ -1,50 +1,46 @@
-﻿using System.Diagnostics;
-
-namespace FridgeControll
+﻿namespace FridgeControll
 {
     public class FridgeInFile : FridgeBase
     {
-        List<float> temperatures = new List<float>();
-        List<float> badTemperatures = new List<float>();
         public override event TemperatureAddedDelegate TemperatureAdded;
         public FridgeInFile()
             : base()
         {
-            string allTempsfileName = CreateFileName(this.Producer, this.Id) + "All.txt";
-            string badTempsfileName = CreateFileName(this.Producer, this.Id) + "Bad.txt";
-            this.AllTempsFileName = allTempsfileName;
-            this.BadTempsFileName = badTempsfileName;
+            FilesCreating();
         }
 
-        public FridgeInFile(string producer, string id)
+       public FridgeInFile(string producer, string id)
             : base(producer, id)
         {
-            string allTempsfileName = CreateFileName(producer, id) + "All.txt";
-            string badTempsfileName = CreateFileName(producer, id) + "Bad.txt";
-            this.AllTempsFileName = allTempsfileName;
-            this.BadTempsFileName = badTempsfileName;
+            FilesCreating();
         }
 
         public FridgeInFile(string producer, string id, float correctTemperature, float allowableDifference)
             : base(producer, id, correctTemperature, allowableDifference)
         {
-            string allTempsfileName = CreateFileName(producer, id) + "All.txt";
-            string badTempsfileName = CreateFileName(producer, id) + "Bad.txt";
-            this.AllTempsFileName = allTempsfileName;
-            this.BadTempsFileName = badTempsfileName;
+            FilesCreating();
         }
 
-        public string AllTempsFileName { get; private set; }
-        public string BadTempsFileName { get; private set; }
+        private void FilesCreating()
+        {
+            string allTempsfileName = CreateFileName(Producer, Id) + "_All.txt";
+            string badTempsfileName = CreateFileName(Producer, Id) + "_Bad.txt";
+            AllTempsFileName = allTempsfileName;
+            BadTempsFileName = badTempsfileName;
+        }
+        private string AllTempsFileName { get; set; }
+        private string BadTempsFileName { get; set; }
+        
         public override void AddTemperature(float temperature)
         {
-            if ((temperature >= -10 && temperature <= 40) && ((Math.Abs(temperature - CorrectTemperature)) > AllowableDifference))
+            if ((temperature >= -10 && temperature <= 40) && ((Math.Abs(temperature - CorrectTemperature)) 
+                > AllowableDifference))
             {
-                using (var writerAll = File.AppendText(this.AllTempsFileName))
+                using (var writerAll = File.AppendText(AllTempsFileName))
                 {
                     writerAll.WriteLine(temperature);
                 }
-                using (var writerBad = File.AppendText(this.BadTempsFileName))
+                using (var writerBad = File.AppendText(BadTempsFileName))
                 {
                     writerBad.WriteLine(temperature);
                 }
@@ -53,9 +49,10 @@ namespace FridgeControll
                     TemperatureAdded(this, new EventArgs());
                 }
             }
-            else if ((temperature >= -10 && temperature <= 40) && ((Math.Abs(temperature - CorrectTemperature)) <= AllowableDifference))
+            else if ((temperature >= -10 && temperature <= 40) && ((Math.Abs(temperature - CorrectTemperature)) 
+                <= AllowableDifference))
             {
-                using (var writerAll = File.AppendText(this.AllTempsFileName))
+                using (var writerAll = File.AppendText(AllTempsFileName))
                 {
                     writerAll.WriteLine(temperature);
                 }
@@ -69,39 +66,11 @@ namespace FridgeControll
                 throw new Exception("Invalid temperature value");
             }
         }
-        public override void AddTemperature(string temperature)
-        {
-            if (float.TryParse(temperature, out float result))
-            {
-                AddTemperature(result);
-            }
-            else
-            {
-                throw new Exception("Input value is not a number value!");
-            }
-        }
-        public override void AddTemperature(double temperature)
-        {
-            float temperatureValue = (float)temperature;
-            AddTemperature(temperatureValue);
-        }
-        public override void AddTemperature(int temperature)
-        {
-            float temperatureValue = (float)temperature;
-            AddTemperature(temperatureValue);
-        }
-
-        public override void AddTemperature(long temperature)
-        {
-            float temperatureValue = (float)temperature;
-            AddTemperature(temperatureValue);
-        }
-
         public override Statistics GetStatistics()
         {
             var statistics = new Statistics();
-            var allTemperaturesFromFile = this.ReadAllTemperaturesFromFile();
-            var badTemperaturesFromFile = this.ReadBadTemperaturesFromFile();
+            var allTemperaturesFromFile = ReadAllTemperaturesFromFile();
+            var badTemperaturesFromFile = ReadBadTemperaturesFromFile();
             foreach (var everyTemperature in allTemperaturesFromFile)
             {
                 statistics.AddTemperature(everyTemperature);
@@ -115,9 +84,9 @@ namespace FridgeControll
         private List<float> ReadAllTemperaturesFromFile()
         {
             var allTemperatures = new List<float>();
-            if (File.Exists(this.AllTempsFileName))
+            if (File.Exists(AllTempsFileName))
             {
-                using (var reader = File.OpenText(this.AllTempsFileName))
+                using (var reader = File.OpenText(AllTempsFileName))
                 {
                     var line = reader.ReadLine();
                     while (line != null)
@@ -132,9 +101,9 @@ namespace FridgeControll
         private List<float> ReadBadTemperaturesFromFile()
         {
             var badTemperatures = new List<float>();
-            if (File.Exists(this.BadTempsFileName))
+            if (File.Exists(BadTempsFileName))
             {
-                using (var reader = File.OpenText(this.BadTempsFileName))
+                using (var reader = File.OpenText(BadTempsFileName))
                 {
                     var line = reader.ReadLine();
                     while (line != null)
@@ -147,9 +116,9 @@ namespace FridgeControll
             return badTemperatures;
         }
 
-        public string CreateFileName(string producer, string id)
+        private string CreateFileName(string producer, string id)
         {
-            return producer + id;
+            return ($"{producer}_{id}");
         }
 
     }

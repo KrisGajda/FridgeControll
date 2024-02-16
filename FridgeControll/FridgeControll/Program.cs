@@ -5,7 +5,7 @@ Console.WriteLine("-----------------------------------------");
 Console.WriteLine("Control temperature in laboratory fridge.");
 Console.WriteLine("-----------------------------------------");
 
-var fridge_1 = new FridgeInFile("Polar", "Pol-15-C", 6, 2);
+FridgeInFile fridge_1 = new FridgeInFile("LG", "15-C");
 fridge_1.TemperatureAdded += FridgeTemperatureAdded;
 
 while (true)
